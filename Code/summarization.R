@@ -3,7 +3,7 @@ library(gdata)
 library(seqinr)
 library(DESeq)
 library(UniProt.ws)
-library(gdata)
+#Leer datos
 Exp_set <- read.xls("~/Dropbox/model_analysis/Data/exp_set.xlsx", sheet = 1)
 dim(Exp_set)[1]
 # Creando multifasta para BLAST
@@ -70,94 +70,3 @@ ref = keys(sotUp, "REFSEQ_NUCLEOTIDE")
 
 gen_id<-select(sotUp, keys = as.vector(Exp_set$Genes), columns = "ENTREZ_GENE", keytype = "REFSEQ_NUCLEOTIDE")
 write.table(x = gen_id, file = "id_entrez-gene",quote = FALSE, sep = "\t")
-#En este punto en excel se eliminan los IDs duplicados y se combinan las tablas (Expr_set_anotado y id_entrez_gene) para obtener los IDs Entrez Gene a los conteos
-
-
-#### Pruebas
-
-namesRef <- gen_id$REFSEQ_NUCLEOTID
-namesRef
-length(namesRef)
-unique_namesRef<- unique(gen_id$REFSEQ_NUCLEOTIDE)
-
-length(unique_namesRef)
-Exp_set$Genes[Exp_set$Genes%in%unique_namesRef] <- gen_id$ENTREZ_GENE[Exp_set$Genes%in%unique_namesRef]
-for(i in Exp_set$Genes){
-  print(i)
-  Exp_set$Genes <-factor(gen_id$ENTREZ_GENE[Exp_set$Genes%in%unique_namesRef])
-  Exp_set[Exp_set$Genes]<-as.factor(gen_id$ENTREZ_GENE[unique_namesRef%in%Exp_set$Genes])
-  print(Exp_set$Genes)
-}
- 
-Exp_set$Genes[Exp_set$Genes%in%unique_namesRef] <- factor(gen_id$ENTREZ_GENE[unique_namesRef%in%Exp_set$Genes])
-Potato1$LOWER.BOUND[Potato1$ID%in%id_rev]=-1000
-
-replace(x = as.vector(Exp_set$Genes), list = as.vector(gen_id$ENTREZ_GENE), values = gen_id$ENTREZ_GENE)
-  
-
-replace(x = as.vector(gen_id$ENTREZ_GENE[unique_namesRef%in%Exp_set$Genes]), list = as.vector(Exp_set$Genes[Exp_set$Genes%in%unique_namesRef]), values = gen_id$ENTREZ_GENE)
-
-for(i in Exp_set$Genes){
-  grep(pattern = i, x = gen_id$REFSEQ_NUCLEOTIDE)
-}
-
-
-ids_ref<- as.vector(unique(gen_id$REFSEQ_NUCLEOTIDE))
-
-ids_EG<-(unique(gen_id[gen_id[,1]%in%ids_ref,2]))
-
-ids_EG<-(unique(gen_id[gen_id[,1]%in%Exp_set$Genes,2]))
-
-ids_EG
-
-ids_EG<-paste0(gen_id[gen_id[,1]%in%ids_ref,2],collapse = " ")
-
-gen_id_unique<- as.data.frame(cbind(ids_ref,ids_EG))
-
-summary.ec <- function(id) {
-  data <- reaction_all[reaction_all[, "id"] %in% id, ]
-  data[, "ec"] <- paste0(unique(data[, "ec"]), collapse = sep)
-  ec <- as.vector(sapply(id,function(id){paste0(sot[sot[,1]%in%id,3],collapse = "   ")}))
-  
-  sel <- gen_id[-c(duplicated(gen_id$REFSEQ_NUCLEOTIDE)),]
-  sel <- gen_id[ gen_id$REFSEQ_NUCLEOTIDE ,]
-
-###Sumarizar y normalizar datos de expresión
-#Obtener caracteristicas de los datos
-
-#dim(Exp_set_anotado)
-#head(Exp_set_anotado)
-
-#Crear el vector de condiciones
-#cond <- factor(c("0h","0h","0h","24h","24h", "24h", "72h", "72h","72h"))
-#cond
-
-#7. Creando countsTable
-#rownames(Exp_set_anotado) <- Exp_set_anotado$Genes
-#Exp_set_anotado[,-1]
-#countsTable <- Exp_set_anotado[,-1]
-#head(countsTable)
-#countsTable <- as.data.frame(Exp_set[,-1])
-#head(countsTable)
-
-#8.Creando objeto para usar DeSeq
-
-#cds <- newCountDataSet(countsTable, cond)
-#cds 
-
-#9. Ajustar factores de tamaño y normalización 
-#cds <- estimateSizeFactors(cds)
-#sizeFactors(cds)
-#norm_count<-(counts(cds,normalized=TRUE))
-
-# obtener la media de los conteos por tratamiento
-#col1 <-conditions(cds)=="DMSO"
-#head(counts(cds)[,col1])
-#col2 <-conditions(cds)== "CA"
-#head(counts(cds)[,col2])
-#means_count_t1<-((rowMeans(t(t(counts(cds)[,col1])/sizeFactors(cds)[col1]))))
-#head(means_count_t1)
-#means_count_t2<-((rowMeans(t(t(counts(cds)[,col2])/sizeFactors(cds)[col2]))))
-
-
-
