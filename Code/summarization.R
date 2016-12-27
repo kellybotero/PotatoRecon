@@ -1,8 +1,10 @@
-##Anotación de ESTs
+# Librerias
 library(gdata)
 library(seqinr)
 library(DESeq)
 library(UniProt.ws)
+
+##Anotación de ESTs
 #Leer datos
 Exp_set <- read.xls("~/Dropbox/model_analysis/Data/exp_set.xlsx", sheet = 1)
 dim(Exp_set)[1]
@@ -13,23 +15,15 @@ write.fasta(sequences = strsplit(as.vector(Exp_set[1:dim(Exp_set)[1],1]),""),
 #BLAST
 #Creación de bases de datos
 ##Fuente: Index of ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000226075.1_SolTub_3.0/
-#makeblastdb -in GCF_000226075.1_SolTub_3.0_protein.faa -parse_seqids -dbtype prot # Con esta DB no se obtinen anotación probablemente por la corta longitud del query
 #makeblastdb -in GCF_000226075.1_SolTub_3.0_rna.fna -parse_seqids -dbtype nucl # Final
-#makeblastdb -in GCF_000226075.1_SolTub_3.0_genomic.fna -parse_seqids -dbtype nucl  # Esta DB no sirve para anotar genes porque los ID son de Scafolds completos
+
 
 # BLASTN con cobertura 100% y E-Value menor a 0.1 (final)
-#Se realiza en el servidor de la universidad
 # nohup blastn -db ../DBs/rna_potato/GCF_000226075.1_SolTub_3.0_rna.fna -query exp_set.fasta -task 'blastn-short' -perc_identity 100 -num_alignments 1 -outfmt 6 -evalue 0.1 -out anotation_ESTs.out  -num_threads 16
 
-#BLASTX (test)
-#nohup blastx -db ../DBs/protein_potato/GCF_000226075.1_SolTub_3.0_protein.faa -query exp_set.fasta -outfmt 6 -evalue 0.0000001 -best_hit_overhang 0.1 -best_hit_score_edge 0.1 -max_target_seqs 1 -out annotation_ESTs_prot.out -num_threads 12
-#No hay hit para blastx, ni siquiera dejando los parametros menos restrictivos
-
-# BLASTN con cobertura 100% y E-Value menor a 0.1 (test)
-#blastn -db ../DBs/genomic_potato/GCF_000226075.1_SolTub_3.0_genomic.fna -query exp_set.fasta -task 'blastn-short' -perc_identity 100 -num_alignments 1 -outfmt 6 -evalue 0.1 -out anotation_ESTs_genomic.out  -num_threads 12 
 
 #Cargar anotaciones
-Ano_exp_set<-read.csv("~/Dropbox/model_analysis/Data/annotation_ESTs.out",sep = "\t",header = FALSE)
+Ano_exp_set<-read.csv("~/PotatoRecon/Data/annotation_ESTs.out",sep = "\t",header = FALSE)
 
 # Buscando genes únicos
 names<-as.vector(Ano_exp_set[,2])
