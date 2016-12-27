@@ -1,4 +1,4 @@
-kegg_sot <- read.csv("~/Dropbox/model_analysis/Results/kegg_sot")
+kegg_sot <- read.csv("~/PotatoRecon/Results/kegg_sot")
 kegg_rx <- as.vector(kegg_sot$reaction)
 kegg_rx <- as.vector(sapply(kegg_rx, function(reaction){
   reaction <- unlist(strsplit(reaction,"[[:blank:]]+<=>[[:blank:]]+"))
@@ -9,7 +9,7 @@ kegg_rx <- as.vector(sapply(kegg_rx, function(reaction){
   return(paste(reactants,products,sep = " <=> "))
 }))
 kegg_sot <- cbind(as.vector(kegg_sot$id),kegg_rx)
-setwd("/home/kelly/Dropbox/model_analysis/Results/")
+setwd("~/PotatoRecon/Results/")
 write.csv2(kegg_sot,file = "compartimentalizado")
 
 
