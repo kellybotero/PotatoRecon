@@ -26,7 +26,7 @@ colnames(dG)[4] <- "Direction"
 
 # Cargando modelo
 library(gdata)
-Potato <- read.xls("~/Dropbox/model_analysis/Data/RXN-reversibilidad.xlsx",sheet = 3)
+Potato <- read.xls("~/PotatoRecon/Data/RXN-reversibilidad.xlsx",sheet = 3)
 #Potato <- Potato[!Potato$X.=="#",]
 sot <- as.data.frame(cbind(as.vector(Potato$ID),as.vector(Potato$EQUATION)))
 colnames(sot) <- c("id","reaction")
