@@ -13,5 +13,6 @@ extract <- function(reaction){
 ids <- regmatches(Reactions,regexpr("R[[:digit:]]+",Reactions))
 rx<-as.vector(sapply(Reactions, extract))
 out <- cbind(ids,rx)
+setwd("~PotatoRecon/Results/")
 write.table(out,quote = FALSE,col.names = FALSE,row.names = FALSE,file = "KEGG.out")
 
