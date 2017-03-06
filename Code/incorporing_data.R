@@ -4,12 +4,12 @@ library(seqinr)
 library(DESeq)
 library(UniProt.ws)
 #Leer datos
-Exp_set <- read.xls("~/Dropbox/model_analysis/Data/exp_set.xlsx", sheet = 1)
+Exp_set <- read.xls("~/PotatoRecon/Data/exp_set.xlsx", sheet = 1)
 dim(Exp_set)[1]
 # Creando multifasta para BLAST
 write.fasta(sequences = strsplit(as.vector(Exp_set[1:dim(Exp_set)[1],1]),""),
             names = 1:dim(Exp_set)[1],
-            file.out = "Dropbox/model_analysis/Data/exp_set.fasta")
+            file.out = "~/PotatoRecon/Data/exp_set.fasta")
 #BLAST
 #Creación de bases de datos
 ##Fuente: Index of ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000226075.1_SolTub_3.0/
@@ -29,7 +29,7 @@ write.fasta(sequences = strsplit(as.vector(Exp_set[1:dim(Exp_set)[1],1]),""),
 #blastn -db ../DBs/genomic_potato/GCF_000226075.1_SolTub_3.0_genomic.fna -query exp_set.fasta -task 'blastn-short' -perc_identity 100 -num_alignments 1 -outfmt 6 -evalue 0.1 -out anotation_ESTs_genomic.out  -num_threads 12 
 
 #Cargar anotaciones
-Ano_exp_set<-read.csv("~/Dropbox/model_analysis/Data/annotation_ESTs.out",sep = "\t",header = FALSE)
+Ano_exp_set<-read.csv("~/PotatoRecon/Data/annotation_ESTs.out",sep = "\t",header = FALSE)
 
 # Buscando genes únicos
 names<-as.vector(Ano_exp_set[,2])
@@ -51,7 +51,7 @@ Exp_set<-t(sapply(unique_names[grep("_",unique_names)], maxcounts))
 head(Exp_set)
 
 # Escribiendo archivo de resultados
-setwd("~/Dropbox/model_analysis/Results/")
+setwd("~/PotatoRecon/Results/")
 write.table(x = Exp_set, quote = FALSE, sep = "\t", file = "Expr_set_anotado")
 
 ##Obtener GENEID para los genes anotados
@@ -60,7 +60,7 @@ write.table(x = Exp_set, quote = FALSE, sep = "\t", file = "Expr_set_anotado")
 # 2. Se obtiene el promedio de los conteos por cada tratamiento
 # 3. Se guarda como xlsx
 
-Exp_set <- read.xls("~/Dropbox/model_analysis/Results/Expr_set_anotado.xlsx", sheet = 1)
+Exp_set <- read.xls("~/PotatoRecon/Results/Expr_set_anotado.xlsx", sheet = 1)
 
 sotUp <- UniProt.ws(taxId=4113)
 keytypes(sotUp)
@@ -112,12 +112,12 @@ maxcounts<- function(id){
 Data_Exp<-t(sapply(unique_namesEG, maxcounts))
 head(Data_Exp)
 dim(Data_Exp)
-setwd("~/Dropbox/model_analysis/Results/")
+setwd("~/PotatoRecon/Results/")
 write.table(x = Data_Exp, quote = FALSE, sep = "\t", file = "Exp_set_inc")
 #En este punto se organizan los titulos del dataset manualmente
 
 ##Creando los expresiónSet
-data <- read.xls("~/Dropbox/model_analysis/Results/Exp_set_inc.xlsx")
+data <- read.xls("~/PotatoRecon/Results/Exp_set_inc.xlsx")
 data <- unique(data[!is.na(data[,"ENTREZ_GENE"]),])
 Expr_set0<- ExpressionSet(matrix(data[,5],dimnames = list(data[,"ENTREZ_GENE"],c())))
 Expr_set24<- ExpressionSet(matrix(data[,9],dimnames = list(data[,"ENTREZ_GENE"],c())))
@@ -148,13 +148,14 @@ Potato3 <- Potato3[,c(1,2,3,4,5,6,7,8,9)]
 names(Potato3) <- c("ID","NAME","REACTION","EC.NUMBER","GPR","LOWER.BOUND","UPPER.BOUND","OBJECTIVE","COMPARTMENT")
 Potato3 <- as.data.frame.array(Potato3)
 setwd("~/Dropbox/model_analysis/Results/")
-to.sbml(Potato3,"Potato.xml")
-model1 <- readSBMLmod("Potato.xml")
+to.sbml(Potato3,"Potato3.6-3.xml")
+model1 <- readSBMLmod("Potato3.6-3.xml")
 model1 <- addExchReact(model1,"Biomass[c]",ub = 1000)
 findExchReact(model1)
 optimizeProb(model1)
 model1@lowbnd[75]
 FBA_modelin <- optimizeProb(model1, algorithm = "fba", retOptSol = FALSE)
+
 #numero de reacciones con flujo.
 length(FBA_modelin$fldind[FBA_modelin$fluxes!=0])
 rxn_flux_in<- FBA_modelin$fldind[FBA_modelin$fluxes!=0]
@@ -163,7 +164,7 @@ write.table(rxn_flux_in,"rxn_flux_in", sep = "\t")
 FBA_modelinit <- optimizeProb(model1, algorithm = "fba", retOptSol = TRUE)
 
 ####MEAN###
-### Estos son los modelo determinados para la interacción P. infestans y s. tuberosum
+### Estos son los modelos determinados para la interacción P. infestans y s. tuberosum
 #Incorporar Datos de expresión al modelo tomando  el promedio de los datos de expresión como valor de flujo para las reacciones que no tienen datos de expresión
 #par(mfcol=c(1,3))
 par(lab=c(5,20,10))
@@ -198,16 +199,7 @@ rxn_flux <- read.xls(xls = "~/Dropbox/model_analysis/Results/rxn_flux_general_mo
 length(unique(rxn_flux$X))
 
 ###Results analysis
-## Obtener diferencias significativas (fold change) de los flujos de reaccion para los tiempos de infección
-DifferencesT1T2<- fluxDifferences(model1 = model0h, model2 = model24h)
-write.csv(DifferencesT1T2, "DifferencesT1-T2.csv")
-DifferencesT2T3<- fluxDifferences(model1 = model24h, model2 = model72h)
-write.csv(DifferencesT2T3, "DifferencesT2-T3.csv")
-DifferencesT1T3<-fluxDifferences(model1 = model0h, model2 = model72h)
-write.csv(DifferencesT1T3, "DifferencesT1-T3.csv")
-##La sosciación de las reacciones con las rutas esta en el script Graph_barce.R
-
-###Obtener flujo de reacciones claves modelo metabolico inicial sin resticciones valores de expresión
+##Obtener flujo de reacciones claves modelo metabolico inicial sin resticciones valores de expresión
 FBA_modelin$fluxes[2046]#RBS01
 FBA_modelin$fluxes[74]#RK0004
 FBA_modelin$fluxes[75]#RK0005
@@ -344,108 +336,7 @@ FBA_model72h$fluxes[398]#R01051
 FBA_model72h$fluxes[398]#R01051
 FBA_model72h$fluxes[1973]#RK0003
 FBA_model72h$fluxes[566]#R00948
-###Obtener flujo de reacciones exchange 0hdp
-FBA_model0h$fluxes[2047]
-FBA_model0h$fluxes[2048]
-FBA_model0h$fluxes[2049]
-FBA_model0h$fluxes[2050]
-FBA_model0h$fluxes[2051]
-FBA_model0h$fluxes[2052]
-FBA_model0h$fluxes[2053]
-FBA_model0h$fluxes[2054]
-FBA_model0h$fluxes[2055]
-FBA_model0h$fluxes[2056]
-FBA_model0h$fluxes[2057]
-FBA_model0h$fluxes[2058]
-FBA_model0h$fluxes[2059]
 
-FBA_model24h$fluxes[2047]
-FBA_model24h$fluxes[2048]
-FBA_model24h$fluxes[2049]
-FBA_model24h$fluxes[2050]
-FBA_model24h$fluxes[2051]
-FBA_model24h$fluxes[2052]
-FBA_model24h$fluxes[2053]
-FBA_model24h$fluxes[2054]
-FBA_model24h$fluxes[2055]
-FBA_model24h$fluxes[2056]
-FBA_model24h$fluxes[2057]
-FBA_model24h$fluxes[2058]
-FBA_model24h$fluxes[2059]
-
-FBA_model72h$fluxes[2047]
-FBA_model72h$fluxes[2048]
-FBA_model72h$fluxes[2049]
-FBA_model72h$fluxes[2050]
-FBA_model72h$fluxes[2051]
-FBA_model72h$fluxes[2052]
-FBA_model72h$fluxes[2053]
-FBA_model72h$fluxes[2054]
-FBA_model72h$fluxes[2055]
-FBA_model72h$fluxes[2056]
-FBA_model72h$fluxes[2057]
-FBA_model72h$fluxes[2058]
-FBA_model72h$fluxes[2059]
-
-
-##Grafica para porcentajes de activación de reacciones por ruta
-pathways <- read.xls(xls = "~/Dropbox/model_analysis/Data/pathways_potato3.xlsx")
-flux<-as.data.frame(FBA_model0h$fluxes)
-flux
-Flux<- as.data.frame(flux[-c(2069),])
-dim(Flux)
-nueva.col<-c(seq(1:2068))
-ID<- as.data.frame(Potato3$ID)
-Flux$ID<-nueva.col
-Flux$ID<- as.vector(Potato3$ID)
-dim(Flux)
-Flux$Pathways <-nueva.col
-Flux$Pathways <- pathways$SUBSYSTEM[pathways$ID%in%Flux$ID]
-write.table(Flux, "Flux_all")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##Obtener flujo para reacciones de rutas metabolicas clve en el análisis fold change
-#Glutatione metabolism
-FBA_model72h$fluxes[1529]#R03749
-FBA_model72h$fluxes[1530] #R00251
-FBA_model72h$fluxes[1531]#R00894
-FBA_model72h$fluxes[1532]#R00497
-FBA_model72h$fluxes[1533]#R00899
-FBA_model72h$fluxes[1534]#R01262
-FBA_model0h$fluxes[1524]#R00644
-FBA_model0h$fluxes[1525]#R00115
 
 
 
