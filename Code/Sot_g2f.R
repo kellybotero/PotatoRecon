@@ -88,6 +88,7 @@ newtoinclude <- adata[adata$ec%in%ecs,]
 newnew <- adata[adata$ec%in%sot_summary$ec,]
 newnew <- newnew[!is.na(newnew$ec),]
 toinclude <- unique(rbind(newnew,newtoinclude))
+setwd("~/PotatoRecon/Results/")
 write.table(toinclude, file = "gapfill_kegg_all", sep = ",")
 
 #En este punto se realiza validación manual de las reacciones a incluir
@@ -109,7 +110,7 @@ gpr<-unlist(map.gpr(Potato2$ID, "sot"))
 class(gpr)
 Potato2 <- as.data.frame.array(Potato2)
 Potato2$GENE.ASSOCIATION[Potato2$ID%in%names(gpr)] <- as.vector(gpr)
-setwd("~/Dropbox/model_analysis/Results/")
+setwd("~/PotatoRecon/Results/")
 write.csv(Potato2, "Potato2.csv")
 
  
