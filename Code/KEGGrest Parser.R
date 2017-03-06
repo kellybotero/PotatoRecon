@@ -1,4 +1,4 @@
-Reactions <- read.delim("~/Dropbox/model_analysis/DBs/Kegg_reaction.lst",header = TRUE)
+Reactions <- read.delim("~/PotatoRecon/Data/Kegg_reaction.lst",header = TRUE)
 Reactions <- as.vector(Reactions$keggList..reaction..)
 reaction <- Reactions[64]
 
