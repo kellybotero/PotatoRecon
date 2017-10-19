@@ -1,4 +1,4 @@
-ID,NAME,EQUATION,EC.NUMBER,GENE.ASSOCIATION,LOWER.BOUND,UPPER.BOUND,OBJECTIVE,COMPARTMENT,SUBSYSTEM
+ID,NAME,REACTION,EC,GPR,LOWER.BOUND,UPPER.BOUND,OBJECTIVE,COMPARTMENT,SUBSYSTEM
 R00243,L-Glutamate:NAD+ oxidoreductase (deaminating),H2O[c] + NAD+[c] + L-Glutamate[c] <=> NADH[c] + NH3[c] + 2-Oxoglutarate[c] + H+[c],1.4.1.2         1.4.1.3,( 102585678 and 102599312 and 102589055 and 102586580 ),-1000,1000,NA,c,"Alanine, aspartate and glutamate metabolism"
 R00248,L-Glutamate:NADP+ oxidoreductase (deaminating),H2O[c] + NADP+[c] + L-Glutamate[c] <=> NADPH[c] + NH3[c] + 2-Oxoglutarate[c] + H+[c],1.4.1.3         1.4.1.4,( 102585678 and 102599312 and 102589055 and 102586580 ) or ( 102590630 ) or ( 102580516 ),-1000,1000,NA,c,"Alanine, aspartate and glutamate metabolism"
 R10178,4-aminobutanoate:pyruvate aminotransferase,4-Aminobutanoate[c] + Pyruvate[c] <=> Succinate semialdehyde[c] + L-Alanine[c],2.6.1.96,( 102599962 and 102596238 and 102595558 and 102597871 ),-1000,1000,NA,c,"Alanine, aspartate and glutamate metabolism"
@@ -1687,7 +1687,7 @@ R00103,NAD+ phosphohydrolase,H2O[c] + NAD+[c] => AMP[c] + Nicotinamide D-ribonuc
 R00118,NADP+ 2'-phosphohydrolase,H2O[c] + NADP+[c] <=> NAD+[c] + Orthophosphate[c],3.1.3.-,NA,-1000,1000,NA,c,Nicotinate and nicotinamide metabolism
 R01273,N-ribosylnicotinamide ribohydrolase,H2O[c] + N-Ribosylnicotinamide[c] => D-Ribose[c] + Nicotinamide[c],3.2.2.1,( 102606026 ),0,1000,NA,c,Nicotinate and nicotinamide metabolism
 R02323,Nicotinamide ribonucleotide phosphohydrolase,H2O[c] + Nicotinamide D-ribonucleotide[c] => Orthophosphate[c] + N-Ribosylnicotinamide[c],3.1.3.5,( 102603608 and 102604165 ) or ( 102599953 and 102600953 and 102588933 and 102581587 and 102583687 ) or ( 102604280 ),0,1000,NA,c,Nicotinate and nicotinamide metabolism
-R03004,Deamino-NAD+ nucleotidohydrolase,H2O[c] + Deamino-NAD+[c] 0=> AMP[c] + Nicotinate D-ribonucleotide[c],3.6.1.9         3.6.1.22,( 102597072 ),0,1000,NA,c,Nicotinate and nicotinamide metabolism
+R03004,Deamino-NAD+ nucleotidohydrolase,H2O[c] + Deamino-NAD+[c] => AMP[c] + Nicotinate D-ribonucleotide[c],3.6.1.9         3.6.1.22,( 102597072 ),0,1000,NA,c,Nicotinate and nicotinamide metabolism
 R03347,,ATP[c] + Nicotinate D-ribonucleoside[c] <=> ADP[c] + Nicotinate D-ribonucleotide[c],2.7.1.-,NA,-1000,1000,NA,c,Nicotinate and nicotinamide metabolism
 R03546,Cyanate C-N-lyase,H+[c] + HCO3-[c] + Cyanate[c] => CO2[c] + Carbamate[c],4.2.1.104,( 102578903 ),0,1000,NA,c,Nitrogen metabolism
 R07316,,Carbamate[c] <=> NH3[c] + CO2[c],,NA,-1000,1000,NA,c,Nitrogen metabolism
