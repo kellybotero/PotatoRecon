@@ -131,11 +131,11 @@ writeSBMLmod(modelData = potato,modelID = "Potato 3.6.3",outputFile = "Potato.xm
 po <- readSBMLmod("Potato.xml")
 po <- addExchReact(po,"Biomass[c]",lb = 0,ub = 1000)
 optimizeProb(po)
-writeSBMLmod(modelData = po,outputFile = "Potato.xml")
-optimizeProb(readSBMLmod("Potato.xml"))
+writeSBMLmod(modelData = po,outputFile = "Potato3.6-3.xml")
+optimizeProb(readSBMLmod("Potato3.6-3.xml"))
 #Generar modelo con Cobrapy (Code: Potato_v.3.6.ipynb)
 #Cargar modelo generado con minval 
-#model1 <- readSBMLmod("Potato.xml")
+#model1 <- readSBMLmod("Potato3.6-3.xml")
 #Cargar modelo generado con cobrapy
 model1 <- readSBMLmod("Potato3.6xml")
 model1 <- addExchReact(model1,"Biomass[c]",ub = 1000)
