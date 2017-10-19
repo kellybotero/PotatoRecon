@@ -1,6 +1,6 @@
 library(gdata)
 library(minval)
-Potato3 <- read.csv("~/Dropbox/model_analysis/Results/Potato3.6-3.csv")
+Potato3 <- read.csv("~/PotatoRecon/Results/Potato3.6-3.csv")
 Potato3 <- Potato3[,c(1,2,3,4,5,6,7,8,9)]
 names(Potato3) <- c("ID","NAME","REACTION","EC.NUMBER","GPR","LOWER.BOUND","UPPER.BOUND","OBJECTIVE","COMPARTMENT")
 Potato3 <- as.data.frame.array(Potato3)
