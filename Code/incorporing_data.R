@@ -127,7 +127,6 @@ Expr_set72<- ExpressionSet(matrix(data[,13],dimnames = list(data[,"ENTREZ_GENE"]
 setwd("~/PotatoRecon/Results/")
 potato <- read.csv("Potato3.6-3.csv")
 potato <- as.data.frame.array(potato)
-colnames(potato) <- c("ID","NAME","REACTION","EC","GPR","LOWER.BOUND","UPPER.BOUND","OBJECTIVE","COMPARTMENT","SUBSYSTEM")
 writeSBMLmod(modelData = potato,modelID = "Potato 3.6.3",outputFile = "Potato.xml")
 po <- readSBMLmod("Potato.xml")
 po <- addExchReact(po,"Biomass[c]",lb = 0,ub = 1000)
