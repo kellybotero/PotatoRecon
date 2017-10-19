@@ -88,8 +88,8 @@ library(gage)
 install_github("gibbslab/exp2flux")
 library(exp2flux)
 #Leer datos 
-data_Exp <- read.xls("~/Dropbox/model_analysis/Results/Expr_set_anotado_inc.xlsx")
-ID_Gen <- read.csv("~/Dropbox/model_analysis/Data/ID_ENTREZ_GENE.csv",sep = "\t",header = TRUE)
+data_Exp <- read.xls("~/PotatoRecon/Results/Expr_set_anotado_inc.xlsx")
+ID_Gen <- read.csv("~/PotatoRecon/Data/ID_ENTREZ_GENE.csv",sep = "\t",header = TRUE)
 #ID_ENTREZ_GENE.csv es un archivo con solo los ENTREZ_GENE de Expr_set_anotado_inc.xlsx
 
 ##Sumarización de ENTREZ_GENE
