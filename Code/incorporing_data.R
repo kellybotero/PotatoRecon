@@ -137,7 +137,7 @@ optimizeProb(readSBMLmod("Potato3.6-3.xml"))
 #Cargar modelo generado con minval 
 #model1 <- readSBMLmod("Potato3.6-3.xml")
 #Cargar modelo generado con cobrapy
-model1 <- readSBMLmod("Potato3.6xml")
+model1 <- readSBMLmod("Potato3.6.xml")
 model1 <- addExchReact(model1,"Biomass[c]",ub = 1000)
 findExchReact(model1)
 optimizeProb(model1)
