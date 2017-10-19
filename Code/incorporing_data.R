@@ -123,33 +123,22 @@ Expr_set0<- ExpressionSet(matrix(data[,5],dimnames = list(data[,"ENTREZ_GENE"],c
 Expr_set24<- ExpressionSet(matrix(data[,9],dimnames = list(data[,"ENTREZ_GENE"],c())))
 Expr_set72<- ExpressionSet(matrix(data[,13],dimnames = list(data[,"ENTREZ_GENE"],c())))
 
-#Cargar modelo y generar SBML
-#Antes de cargar la reconstrucción para optimizar el modelo, se debe verificar las reversibilidades
-#de reacciones cruciales dentro del modelo, las cuales pudieron ser cambiadas en el paso de cambio 
-#de reversibilidades para darle flujo a la función objetivo
-#Reacciones fijación de carbono irreversibles:(R00024, RK0004, RK0005, R01512, R03140, R02110, R00762, R01067, R01829, R01845, R01523)
-#Reacciones fotorespiración: (R01334, R00475, R00588(R))
-# Reacciones de sitesis de carbohidratos (R00028)
-#El archivo modificado con la verificación de estas reversibilidades es Potato3 y con curación manual de rutas no presentes en sot
-#Despues de realizar los primeros análisis se realiza el cambio de las siguiente reversibilidades (Potato3.1)
-#Reacciones Glycerophospholipid metabolism irreversibles(R01468, R2037, R02051, R02052, R02053, R02054, R02055, R03360, R09034)
-#El archivo modificado con la verificación de reversibilidades es Potato3 y con curación manual de rutas no presentes en sot
-#R00755, R00345, R04779, R00475 (potato3.2)
-#R00867, R01351, R00996, R00372, R02111 (Potato3.3)
-# R07429, R07447, R07450, R07451, R07452, R03316, R00621 (Potato3.4)
-# R03336, R00308, R02778, R00010
-#Se verificaron todas las reversibilidades anteriormente curadas, las cuales se cambiaron para darle flujo a la función objetivo
-#En el archivo RXN-reversibilidad (en data) se encuentran señaladas en amarillo las reaccione a las que se les restablecio la reversibilidad
-#El utlimo archivo de la reconstrucción es potato3.6-1 (cambia reversibilidad de R01051)
-#El utlimo archivo de la reconstrucción es potato3.6-2 (cambia reversibilidad de reacciones exchange)
-#El utlimo archivo de la reconstrucción es potato3.6-3 (se incluye nuevamente el selenate y se asocia la gpr de las reacciones luminicas)
-Potato3 <- read.csv("~/Dropbox/model_analysis/Results/Potato3.6-3.csv")
-Potato3 <- Potato3[,c(1,2,3,4,5,6,7,8,9)]
-names(Potato3) <- c("ID","NAME","REACTION","EC.NUMBER","GPR","LOWER.BOUND","UPPER.BOUND","OBJECTIVE","COMPARTMENT")
-Potato3 <- as.data.frame.array(Potato3)
-setwd("~/Dropbox/model_analysis/Results/")
-to.sbml(Potato3,"Potato3.6-3.xml")
-model1 <- readSBMLmod("Potato3.6-3.xml")
+##Generar y cargar modelo SBML
+setwd("~/PotatoRecon/Results/")
+potato <- read.csv("Potato3.6-3.csv")
+potato <- as.data.frame.array(potato)
+colnames(potato) <- c("ID","NAME","REACTION","EC","GPR","LOWER.BOUND","UPPER.BOUND","OBJECTIVE","COMPARTMENT","SUBSYSTEM")
+writeSBMLmod(modelData = potato,modelID = "Potato 3.6.3",outputFile = "Potato.xml")
+po <- readSBMLmod("Potato.xml")
+po <- addExchReact(po,"Biomass[c]",lb = 0,ub = 1000)
+optimizeProb(po)
+writeSBMLmod(modelData = po,outputFile = "Potato.xml")
+optimizeProb(readSBMLmod("Potato.xml"))
+#Generar modelo con Cobrapy (Code: Potato_v.3.6.ipynb)
+#Cargar modelo generado con minval 
+#model1 <- readSBMLmod("Potato.xml")
+#Cargar modelo generado con cobrapy
+model1 <- readSBMLmod("Potato3.6xml")
 model1 <- addExchReact(model1,"Biomass[c]",ub = 1000)
 findExchReact(model1)
 optimizeProb(model1)
